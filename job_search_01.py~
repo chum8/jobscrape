@@ -1,0 +1,61 @@
+# import os
+import csv
+import webbrowser
+# location level code
+# provides a way of automatically only searching for some locations
+# 0 - preferred and likely
+# 1 - preferred
+# 2 - likely
+# 3 - all searches
+# 4 - wise
+# OR
+# with church-locations-03.csv file
+# 0 - not interested in location at this time
+# 1 - interested in location at this time
+this_location_search_code = 0
+tabs_at_a_time = 8
+filename1, filename2 = 'search-strings-01.csv', 'church-locations-05.csv'
+with open(filename1) as f1:
+    reader = csv.reader(f1)
+    my_searches = []
+    for row in reader:
+        my_searches.append(row[0])
+with open(filename2) as f2:
+    reader = csv.reader(f2)
+    my_locs = []
+    for row in reader:
+        if int(row[2]) == this_location_search_code:
+            temp = row[1] + ", " + row[0]
+            my_locs.append(temp)
+try:
+    s = int(input("Enter a starting position from 0 to " + str(len(my_locs) - 1) + ". (ENTER for default): "))
+    if s >= 0 and s <= len(my_locs) - 1:
+        start_loc = s
+    else:
+        start_loc = 0
+except:
+    start_loc = 0
+print("Starting position", start_loc, "chosen.")
+Continuing = True
+try:
+    for i1 in range(start_loc, len(my_locs), tabs_at_a_time):
+        if not Continuing:
+            break
+        for i2 in range(0, len(my_searches)):
+            # os.system("taskkill /im microsoftedge.exe /f")
+            for i3 in range(0, tabs_at_a_time):
+                url = str(my_searches[i2]) + str(my_locs[i1 + i3])
+                webbrowser.open(url)
+                # print(i3, url)
+            if str(input("Continue searching? (Yn) ")).upper() != "Y":
+                Continuing = False
+                break
+    if Continuing:
+        print("End reached.")
+    else:
+        print("Search terminated.")
+except:
+    print("End reached.")
+# print(my_searches, my_locs)
+        
+

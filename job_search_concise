@@ -1,0 +1,27 @@
+# import os
+# this file simply compiles data concerning where the most jobs per city are
+import csv, requests
+filename1, filename2 = 'results-largest-cities-01.csv', 'results-summed-largest-cities-01.csv'
+city_col, state_col = 1, 2
+split_word="+"
+states = []
+with open(filename1) as f1:
+    reader = csv.reader(f1)
+    with open(filename2, "w+") as f2:
+        writer = csv.writer(f2, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        reading_first = True
+        for row in reader:
+            current_row = []
+            if reading_first:
+                last_state_value = row[0]
+                last_count_value = row[21]
+                reading_first = False
+            if row[0] == last_state_value
+                last_count_value = row[21]
+            else:
+                current_row.append(last_state_value)
+                current_row.append(last_count_value)
+                writer.writerow(current_row)
+
+            last_state_value = row[0]
+            last_count_value = row[21]

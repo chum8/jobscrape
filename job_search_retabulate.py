@@ -1,0 +1,44 @@
+# import os
+# this file simply compiles data concerning where the most jobs per city are
+import csv, requests
+filename1, filename2, filename3 = 'results-largest-cities-sorted-01.csv', 'largest-cities-01.csv', 'results-largest-cities-extra-01.csv'
+pop_list = []
+
+with open(filename2) as f2:
+    reader2 = csv.reader(f2)
+    for row2 in reader2:
+        pop_list.append(row2)
+
+with open(filename1) as f1:
+    reader1 = csv.reader(f1)
+    with open(filename3, "w+") as f3:
+        writer = csv.writer(f3, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        reading_first = True
+        for row1 in reader1:
+            # skip header row
+            if reading_first:
+                row1[21] = "Population"
+                row1.append("Quotient")
+                writer.writerow(row1)
+                reading_first = False
+            else:
+                found = False
+                i = 0
+                for p in pop_list:
+                    if found: break
+                    if row1[0] == p[2] and row1[1] == p[1]:
+                        pop = int(p[3])
+                        jobs = int(row1[20])
+                        try:
+                            q = pop / jobs
+                        # dirty quick way to deal with division by 0
+                        except:
+                            q = 0
+                        row1[21] = pop
+                        row1.append(q)
+                        writer.writerow(row1)
+                        found = True
+                        pop_list.pop(i)
+                    i += 1
+
+
